@@ -1,17 +1,60 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <title>Zufallsbild</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zufallsbilder</title>
   <style>
-    body { text-align: center; font-family: sans-serif; padding: 2rem; }
-    img { max-width: 80%; height: auto; border-radius: 10px; cursor: pointer; }
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      text-align: center;
+      background-color: #000;
+      color: white;
+    }
+
+    h1 {
+      margin: 1rem 0;
+      font-size: 2rem;
+    }
+
+    .image-container {
+      display: flex;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .image-half {
+      flex: 1;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .image-half img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      cursor: pointer;
+    }
+
+    .header {
+      position: absolute;
+      top: 1rem;
+      width: 100%;
+      text-align: center;
+      z-index: 10;
+      font-size: 2rem;
+    }
   </style>
 </head>
 <body>
-  <h1>A&D WORKSHOP</h1>
-  <p>+</p>
-  <img id="randomImage" src="" alt="Ein zufälliges Bild" />
+  <div class="header">Zufällige Bilder</div>
+  <div class="image-container">
+    <div class="image-half"><img id="img1" src="" alt="Bild 1" /></div>
+    <div class="image-half"><img id="img2" src="" alt="Bild 2" /></div>
+  </div>
   <script src="script.js"></script>
 </body>
 </html>

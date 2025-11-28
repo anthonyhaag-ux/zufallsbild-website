@@ -10,6 +10,7 @@
   <link href="https://api.fontshare.com/v2/css?f[]=PlusJakartaSans@400,500,600,700,800&display=swap" rel="stylesheet">
 
   <style>
+    /* === Grundlegendes Styling === */
     html, body {
       margin: 0;
       padding: 0;
@@ -23,13 +24,12 @@
       overflow-y: scroll;
     }
 
-    /* iOS Viewport Safe Area für den gesamten Inhalt */
-@supports (padding: env(safe-area-inset-bottom)) {
-  body {
-    padding-bottom: env(safe-area-inset-bottom);
-  }
-}
-
+    /* iOS Safe Area für den gesamten Inhalt */
+    @supports (padding: env(safe-area-inset-bottom)) {
+      body {
+        padding-bottom: env(safe-area-inset-bottom);
+      }
+    }
 
     /* === Header === */
     .header {
@@ -88,7 +88,7 @@
       justify-content: center;
     }
 
-    /* iOS Safe Area Unterstützung */
+    /* Safe Area für Bottom-Elemente */
     @supports (padding: env(safe-area-inset-bottom)) {
       .caption,
       .counter,
@@ -171,17 +171,17 @@
         height: auto;
       }
 
-  /* 👉 Setzt ALLE Standard-Schriften auf 28px */
-  body, 
-  h1, h2, h3, h4, h5, h6,
-  p, a, span,
-  .caption,
-  .counter,
-  .header h1,
-  .header-right,
-  .next-project {
-    font-size: 28px !important;
-  }
+      /* Alle Schriften auf Mobile auf 28px */
+      body, 
+      h1, h2, h3, h4, h5, h6,
+      p, a, span,
+      .caption,
+      .counter,
+      .header h1,
+      .header-right,
+      .next-project {
+        font-size: 28px !important;
+      }
 
       .next-project {
         display: none;

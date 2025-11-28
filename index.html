@@ -23,6 +23,14 @@
       overflow-y: scroll;
     }
 
+    /* iOS Viewport Safe Area für den gesamten Inhalt */
+@supports (padding: env(safe-area-inset-bottom)) {
+  body {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+
     /* === Header === */
     .header {
       position: fixed;

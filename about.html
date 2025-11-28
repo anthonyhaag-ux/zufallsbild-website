@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>About</title>
+
+  <link href="https://api.fontshare.com/v2/css?f[]=PlusJakartaSans@400,500,600,700,800&display=swap" rel="stylesheet">
+
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #fff;
+      font-family: 'Plus Jakarta Sans', 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 38px;
+      font-weight: 500;
+      line-height: 1.4;
+      color: #000;
+    }
+
+    /* === Header === */
+    .header {
+      position: fixed;
+      top: 14px;
+      left: 20px;
+      right: 20px;
+      z-index: 20;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      pointer-events: none;
+    }
+
+    .header h1, .header a { pointer-events: auto; }
+
+    .header h1 {
+      margin: 0;
+      font-size: 38px;
+      font-weight: 500;
+    }
+
+    .header h1 a {
+      color: #000;
+      text-decoration: none;
+      transition: text-decoration 0.3s ease;
+    }
+
+    .header h1 a:hover {
+      text-decoration: underline;
+      text-underline-offset: 8px;
+    }
+
+    .header-right {
+      color: #000;
+      text-decoration: none;
+      font-size: 38px;
+      transition: text-decoration 0.3s ease;
+    }
+
+    .header-right:hover {
+      text-decoration: underline;
+      text-underline-offset: 8px;
+    }
+
+    /* === Inhalt: Zwei gleich breite Spalten === */
+    .content {
+      display: flex;
+      gap: 60px;
+      margin: 300px 35px 120px 20px;
+      align-items: flex-start;
+    }
+
+    /* Linke Spalte sticky */
+    .column-left {
+      flex: 1;
+      position: sticky;
+      top: 120px; /* Abstand zum Header */
+      height: auto;
+    }
+
+    /* Rechte Spalte scrollt normal (keine eigene Scrollbar) */
+    .column-right {
+      flex: 1;
+    }
+
+    .column-left p,
+    .column-right p {
+      margin-bottom: 40px;
+    }
+
+    /* === Responsive: Spalten untereinander === */
+    @media (max-width: 900px) {
+      html, body {
+        font-size: 38px;
+      }
+
+      .content {
+        flex-direction: column;
+        margin: 200px 20px 100px 20px;
+        gap: 40px;
+      }
+
+      .column-left,
+      .column-right {
+        position: static;
+        width: 100%;
+      }
+
+      .header h1,
+      .header-right {
+        font-size: 38px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="header">
+    <h1><a href="video.html">WORKSHOP+</a></h1>
+    <a href="index.html" class="header-right">Close</a>
+  </div>
+
+  <div class="content">
+
+    <!-- Linke sticky Spalte -->
+    <div class="column-left">
+      <p>Architekten ETH</p>
+      <p>Bändlistrasse 2<br>8052 Zürich</p>
+      <p>Hasensprungstrasse 2<br>8003 Thusis</p>
+    </div>
+
+    <!-- Rechte Spalte scrollt normal mit der Seite -->
+    <div class="column-right">
+      <p>
+        AHADIA is a group of spatial practitioners and researchers working together since 2018.
+        <br><br>
+        Seeking a balance with nature, projects take advantage of site-specific conditions.  
+        //005 The Ice Shell Project uses the phase change of water for creating thin shells out of ice, and  
+        //007 House Without Heating harnesses its south exposure for warmth from the sun, delicately balancing solar radiation, making any technology for heating unnecessary.
+        <br><br>
+        Nonetheless, technology is celebrated and applied where necessary.  
+        Therefore, in //009 Tinizong all inaccuracies of an old crooked barn are 3D-scanned with LiDAR and drone mapping technology, taking advantage of the engineering marvels of our time where necessary.
+        <br><br>
+        Seeking the most simple, spectacular version.
+        <br><br>
+        AHADIA is an architectural design studio focused on creating sustainable, harmonious spaces that blend with their natural surroundings.  
+        We believe in the power of natural materials, particularly wood, to create structures that are both beautiful and environmentally responsible.
+        <br><br>
+        Our approach combines traditional craftsmanship with innovative design thinking, resulting in buildings that respect their context while pushing boundaries.  
+        Each project is a unique exploration of what's possible when we work with nature rather than against it.
+        <br><br>
+        Founded in 2018, our studio has completed residential and commercial projects across Europe, with a particular focus on Alpine and rural environments.  
+        We are committed to creating architecture that will stand the test of time, both physically and aesthetically.
+      </p>
+    </div>
+
+  </div>
+
+</body>
+</html>

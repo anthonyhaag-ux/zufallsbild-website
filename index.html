@@ -2,59 +2,430 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Zufallsbilder</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Infinite Carousel Galerie</title>
+
+  <!-- ✅ Switzer über Fontshare einbinden -->
+<link href="https://api.fontshare.com/v2/css?f[]=PlusJakartaSans@400,500,600,700,800&display=swap" rel="stylesheet">
+
   <style>
-    body {
+    html, body {
       margin: 0;
-      font-family: sans-serif;
-      text-align: center;
-      background-color: #000;
-      color: white;
+      padding: 0;
+      height: 100%;
+      background: #fff;
+
+      /* ✅ Schriftart Switzer mit Fallbacks */
+      font-family: 'Plus Jakarta Sans', 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-weight: 500;
+      line-height: 1.4;
+      scroll-snap-type: y mandatory;
+      overflow-y: scroll;
     }
 
-    h1 {
-      margin: 1rem 0;
-      font-size: 2rem;
-    }
-
-    .image-container {
+    /* === Header === */
+    .header {
+      position: fixed;
+      top: 14px;
+      left: 20px;
+      right: 35px;
+      background: transparent;
+      z-index: 20;
       display: flex;
+      justify-content: space-between;
+      align-items: center;
+      pointer-events: none;
+    }
+    .header h1, .header a { pointer-events: auto; }
+
+    .header h1 {
+      font-size: 38px;
+      font-weight: 500;
+      margin: 0;
+    }
+
+    .header h1 a,
+    .header-right {
+      text-decoration: none;
+      color: black;
+      font-style: normal;
+      font-size: 38px;
+      transition: font-style 0.4s ease, font-weight 0.4s ease;
+    }
+
+    .header h1 a:hover,
+    .header-right:hover {
+      text-decoration: underline; 
+      text-underline-offset: 10px;
+    }
+
+    .header-right {
+      position: fixed;
+      top: 14px;
+      right: 20px;
+    }
+
+    /* === Projektabschnitte === */
+    .project-row {
+      position: relative;
       width: 100vw;
       height: 100vh;
+      scroll-snap-align: start;
       overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    .image-half {
-      flex: 1;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .image-half img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      cursor: pointer;
-    }
-
-    .header {
+    .caption {
       position: absolute;
-      top: 1rem;
-      width: 100%;
-      text-align: center;
+      bottom: 14px;
+      left: 20px;
+      font-size: 38px;
+      color: #000;
       z-index: 10;
-      font-size: 2rem;
+      text-transform: none;
     }
+
+    .counter {
+      position: absolute;
+      bottom: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 38px;
+      color: #000;
+      z-index: 10;
+    }
+
+    .gallery-wrapper {
+      display: flex;
+      height: 100%;
+      transition: transform 0.6s ease;
+      will-change: transform;
+    }
+
+    .slide {
+      flex: 0 0 auto;
+      margin: 0 12.5vw;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Querformat */
+    .slide img.landscape {
+      height: 50vh;
+      width: auto;
+      object-fit: contain;
+    }
+
+    /* Hochformat */
+    .slide img.portrait {
+      max-height: 70vh;
+      width: auto;
+      object-fit: contain;
+    }
+
+    /* === Next Project Button === */
+    .next-project {
+      position: fixed;
+      bottom: 14px;
+      right: 20px;
+      font-size: 38px;
+      font-family: 'Switzer', 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      color: #000;
+      text-decoration: none;
+      cursor: pointer;
+      z-index: 30;
+      transition: all 0.3s ease;
+    }
+
+    .next-project:hover {
+      text-decoration: underline;
+      text-underline-offset: 10px;
+    }
+
+    @media (max-width: 900px) {
+  .slide img.landscape {
+    max-width: 100vw;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+
+  .next-project {
+    display: none;
+  }
+
+  .counter {
+    left: auto;
+    right: 20px;
+    transform: none; /* ganz wichtig! */
+    font-size: 38px; /* optional kleiner */
+  }
+}
+
   </style>
 </head>
+
 <body>
-  <div class="header">Zufällige Bilder</div>
-  <div class="image-container">
-    <div class="image-half"><img id="img1" src="" alt="Bild 1" /></div>
-    <div class="image-half"><img id="img2" src="" alt="Bild 2" /></div>
+  <div class="header">
+    <h1><a href="video.html">WORKSHOP+</a></h1>
+    <a href="about.html" class="header-right">Info</a>
   </div>
-  <script src="script.js"></script>
+
+  <div id="projects"></div>
+
+  <!-- ✅ "Next Project" Button -->
+  <div class="next-project">Next</div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const projects = [
+        { name: 'GreenhouseHouse', path: 'img1/', count: 4 },
+        { name: 'House without Heating', path: 'img2/', count: 13 },
+        { name: 'The Ice Shell Project', path: 'img3/', count: 7 },
+        { name: 'House with a garden Room', path: 'img4/', count: 4 },
+        { name: 'House without Heating', path: 'img5/', count: 13 },
+        { name: 'The Ice Shell Project', path: 'img6/', count: 7 }
+      ];
+
+      // shuffle projects
+      function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+      }
+
+      const container = document.getElementById('projects');
+
+      // Cursor-SVGs
+      const cursors = {
+        left: "url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"32\" height=\"32\"><polygon points=\"20,6 20,26 6,16\" fill=\"black\"/></svg>') 6 16, auto",
+        right: "url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"32\" height=\"32\"><polygon points=\"12,6 12,26 26,16\" fill=\"black\"/></svg>') 26 16, auto",
+        up: "url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"32\" height=\"32\"><polygon points=\"6,20 26,20 16,6\" fill=\"black\"/></svg>') 16 6, auto",
+        down: "url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"32\" height=\"32\"><polygon points=\"6,12 26,12 16,26\" fill=\"black\"/></svg>') 16 26, auto"
+      };
+
+      shuffle(projects).forEach(project => {
+        const images = Array.from({length: project.count}, (_, i) => `${project.path}Bild${i+1}.jpg`);
+        const slides = [images[images.length-1], ...images, images[0]];
+        let current = 1;
+
+        const row = document.createElement('div');
+        row.className = 'project-row';
+
+        const caption = document.createElement('div');
+        caption.className = 'caption';
+        caption.textContent = project.name;
+        row.appendChild(caption);
+
+        const counter = document.createElement('div');
+        counter.className = 'counter';
+        counter.textContent = `${current} / ${images.length}`;
+        row.appendChild(counter);
+
+        const wrapper = document.createElement('div');
+        wrapper.className = 'gallery-wrapper';
+
+        slides.forEach(src => {
+          const slide = document.createElement('div');
+          slide.className = 'slide';
+          const img = document.createElement('img');
+          img.src = src;
+          img.addEventListener('load', () => {
+            if (img.naturalWidth > img.naturalHeight) {
+              img.classList.add('landscape');
+            } else {
+              img.classList.add('portrait');
+            }
+          });
+          slide.appendChild(img);
+          wrapper.appendChild(slide);
+        });
+
+        row.appendChild(wrapper);
+        container.appendChild(row);
+
+        function getDisplayIndex() {
+          if (current === 0) return images.length;
+          if (current === images.length + 1) return 1;
+          return current;
+        }
+
+        function update(animate = true) {
+          wrapper.style.transition = animate ? "transform 0.6s ease" : "none";
+          const slidesEls = wrapper.querySelectorAll('.slide');
+          const currentSlide = slidesEls[current];
+          if (!currentSlide) return;
+
+          const rowRect = row.getBoundingClientRect();
+          const slideRect = currentSlide.getBoundingClientRect();
+          const rowCenter = rowRect.left + rowRect.width / 2;
+          const slideCenter = slideRect.left + slideRect.width / 2;
+          const offset = rowCenter - slideCenter;
+
+          const style = window.getComputedStyle(wrapper);
+          const matrix = new DOMMatrixReadOnly(style.transform);
+          const currentTranslateX = matrix.m41;
+
+          wrapper.style.transform = `translateX(${currentTranslateX + offset}px)`;
+          counter.textContent = `${getDisplayIndex()} / ${images.length}`;
+        }
+
+        // Cursor und Klicklogik
+        row.addEventListener('mousemove', e => {
+          const rowRect = row.getBoundingClientRect();
+          const centerX = rowRect.left + rowRect.width / 2;
+          const clickZoneHeight = rowRect.height * 0.5;
+          const topZone = (rowRect.height - clickZoneHeight) / 2;
+          const bottomZone = rowRect.height - topZone;
+
+          const isFirstRow = !row.previousElementSibling;
+          const isLastRow = !row.nextElementSibling;
+
+          if (e.clientY < rowRect.top + topZone) {
+            row.style.cursor = isFirstRow ? (e.clientX < centerX ? cursors.left : cursors.right) : cursors.up;
+          } else if (e.clientY > rowRect.top + bottomZone) {
+            row.style.cursor = isLastRow ? (e.clientX < centerX ? cursors.left : cursors.right) : cursors.down;
+          } else {
+            row.style.cursor = (e.clientX < centerX) ? cursors.left : cursors.right;
+          }
+        });
+
+        row.addEventListener('click', e => {
+          const rowRect = row.getBoundingClientRect();
+          const centerX = rowRect.left + rowRect.width / 2;
+          const clickZoneHeight = rowRect.height * 0.5;
+          const topZone = (rowRect.height - clickZoneHeight) / 2;
+          const bottomZone = rowRect.height - topZone;
+
+          const isFirstRow = !row.previousElementSibling;
+          const isLastRow = !row.nextElementSibling;
+
+          if (e.clientY < rowRect.top + topZone) {
+            if (!isFirstRow) {
+              const prev = row.previousElementSibling;
+              prev.scrollIntoView({ behavior: "smooth" });
+              return;
+            }
+          } else if (e.clientY > rowRect.top + bottomZone) {
+            if (!isLastRow) {
+              const next = row.nextElementSibling;
+              next.scrollIntoView({ behavior: "smooth" });
+              return;
+            }
+          }
+
+          current += (e.clientX < centerX) ? -1 : 1;
+          update(true);
+
+          wrapper.addEventListener('transitionend', () => {
+            if (current === 0) {
+              current = images.length;
+              update(false);
+            } else if (current === images.length + 1) {
+              current = 1;
+              update(false);
+            }
+          }, { once: true });
+        });
+
+                // --- einfache Keyboard-Helfer für diese Row ---
+        row.goLeft = () => {
+          current -= 1;
+          update(true);
+          const handler = () => {
+            if (current === 0) {
+              current = images.length;
+              update(false);
+            }
+            wrapper.removeEventListener('transitionend', handler);
+          };
+          wrapper.addEventListener('transitionend', handler, { once: true });
+        };
+
+        row.goRight = () => {
+          current += 1;
+          update(true);
+          const handler = () => {
+            if (current === images.length + 1) {
+              current = 1;
+              update(false);
+            }
+            wrapper.removeEventListener('transitionend', handler);
+          };
+          wrapper.addEventListener('transitionend', handler, { once: true });
+        };
+
+
+        function imagesReady(scopeEl) {
+          const imgs = Array.from(scopeEl.querySelectorAll('img'));
+          if (!imgs.length) return Promise.resolve();
+          return Promise.all(imgs.map(img => {
+            if (img.complete && img.naturalWidth > 0) return Promise.resolve();
+            return new Promise(resolve => {
+              const done = () => resolve();
+              img.addEventListener('load', done, { once: true });
+              img.addEventListener('error', done, { once: true });
+            });
+          }));
+        }
+
+        imagesReady(wrapper).then(() => update(false));
+        window.addEventListener('resize', () => update(false));
+      });
+
+      // === "Next Project" Scroll-Button ===
+      const nextBtn = document.querySelector('.next-project');
+      nextBtn.addEventListener('click', () => {
+        const currentRow = Array.from(document.querySelectorAll('.project-row'))
+          .find(row => {
+            const rect = row.getBoundingClientRect();
+            return rect.top >= 0 && rect.top < window.innerHeight / 2;
+          });
+
+        if (!currentRow) return;
+        const next = currentRow.nextElementSibling;
+        if (next) {
+          next.scrollIntoView({ behavior: 'smooth' });
+        } else {
+          // Optional: zurück zum ersten Projekt
+          document.querySelector('.project-row').scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    });
+  document.addEventListener("keydown", function (event) {
+    // Rechts → nächstes Bild
+    if (event.key === "ArrowRight") {
+      if (typeof nextSlide === "function") nextSlide();
+    }
+
+    // Links → vorheriges Bild
+    if (event.key === "ArrowLeft") {
+      if (typeof prevSlide === "function") prevSlide();
+    }
+  });
+
+  // global: Pfeiltasten steuern die aktuell sichtbare project-row
+document.addEventListener('keydown', function (e) {
+  const rows = Array.from(document.querySelectorAll('.project-row'));
+  const activeRow = rows.find(r => {
+    const rect = r.getBoundingClientRect();
+    // prüfe, ob die Mitte des Bildschirms innerhalb der Row liegt
+    return rect.top <= window.innerHeight / 2 && rect.bottom >= window.innerHeight / 2;
+  });
+  if (!activeRow) return;
+
+  if (e.key === 'ArrowRight') {
+    if (typeof activeRow.goRight === 'function') activeRow.goRight();
+  } else if (e.key === 'ArrowLeft') {
+    if (typeof activeRow.goLeft === 'function') activeRow.goLeft();
+  }
+});
+
+  </script>
 </body>
 </html>

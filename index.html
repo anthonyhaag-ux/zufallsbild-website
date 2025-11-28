@@ -204,7 +204,7 @@
 
   <div id="projects"></div>
 
-  <!-- ✅ "Next Project" Button -->
+  <!-- "Next Project" Button -->
   <div class="next-project">Next</div>
 
   <script>
@@ -218,7 +218,6 @@
         { name: 'The Ice Shell Project', path: 'img6/', count: 7 }
       ];
 
-      // shuffle projects
       function shuffle(array) {
         for (let i = array.length - 1; i > 0; i--) {
           const j = Math.floor(Math.random() * (i + 1));
@@ -229,7 +228,6 @@
 
       const container = document.getElementById('projects');
 
-      // Cursor-SVGs
       const cursors = {
         left: "url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"32\" height=\"32\"><polygon points=\"20,6 20,26 6,16\" fill=\"black\"/></svg>') 6 16, auto",
         right: "url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"32\" height=\"32\"><polygon points=\"12,6 12,26 26,16\" fill=\"black\"/></svg>') 26 16, auto",
@@ -303,7 +301,6 @@
           counter.textContent = `${getDisplayIndex()} / ${images.length}`;
         }
 
-        // Cursor und Klicklogik
         row.addEventListener('mousemove', e => {
           const rowRect = row.getBoundingClientRect();
           const centerX = rowRect.left + rowRect.width / 2;
@@ -361,7 +358,7 @@
           }, { once: true });
         });
 
-                // --- einfache Keyboard-Helfer für diese Row ---
+        // Keyboard Navigation
         row.goLeft = () => {
           current -= 1;
           update(true);
@@ -388,7 +385,6 @@
           wrapper.addEventListener('transitionend', handler, { once: true });
         };
 
-
         function imagesReady(scopeEl) {
           const imgs = Array.from(scopeEl.querySelectorAll('img'));
           if (!imgs.length) return Promise.resolve();
@@ -406,7 +402,7 @@
         window.addEventListener('resize', () => update(false));
       });
 
-      // === "Next Project" Scroll-Button ===
+      // === "Next Project" Button ===
       const nextBtn = document.querySelector('.next-project');
       nextBtn.addEventListener('click', () => {
         const currentRow = Array.from(document.querySelectorAll('.project-row'))
@@ -414,46 +410,28 @@
             const rect = row.getBoundingClientRect();
             return rect.top >= 0 && rect.top < window.innerHeight / 2;
           });
-
         if (!currentRow) return;
         const next = currentRow.nextElementSibling;
-        if (next) {
-          next.scrollIntoView({ behavior: 'smooth' });
-        } else {
-          // Optional: zurück zum ersten Projekt
-          document.querySelector('.project-row').scrollIntoView({ behavior: 'smooth' });
+        if (next) next.scrollIntoView({ behavior: 'smooth' });
+        else document.querySelector('.project-row').scrollIntoView({ behavior: 'smooth' });
+      });
+
+      // Pfeiltasten global
+      document.addEventListener('keydown', function(e) {
+        const rows = Array.from(document.querySelectorAll('.project-row'));
+        const activeRow = rows.find(r => {
+          const rect = r.getBoundingClientRect();
+          return rect.top <= window.innerHeight / 2 && rect.bottom >= window.innerHeight / 2;
+        });
+        if (!activeRow) return;
+
+        if (e.key === 'ArrowRight') {
+          if (typeof activeRow.goRight === 'function') activeRow.goRight();
+        } else if (e.key === 'ArrowLeft') {
+          if (typeof activeRow.goLeft === 'function') activeRow.goLeft();
         }
       });
     });
-  document.addEventListener("keydown", function (event) {
-    // Rechts → nächstes Bild
-    if (event.key === "ArrowRight") {
-      if (typeof nextSlide === "function") nextSlide();
-    }
-
-    // Links → vorheriges Bild
-    if (event.key === "ArrowLeft") {
-      if (typeof prevSlide === "function") prevSlide();
-    }
-  });
-
-  // global: Pfeiltasten steuern die aktuell sichtbare project-row
-document.addEventListener('keydown', function (e) {
-  const rows = Array.from(document.querySelectorAll('.project-row'));
-  const activeRow = rows.find(r => {
-    const rect = r.getBoundingClientRect();
-    // prüfe, ob die Mitte des Bildschirms innerhalb der Row liegt
-    return rect.top <= window.innerHeight / 2 && rect.bottom >= window.innerHeight / 2;
-  });
-  if (!activeRow) return;
-
-  if (e.key === 'ArrowRight') {
-    if (typeof activeRow.goRight === 'function') activeRow.goRight();
-  } else if (e.key === 'ArrowLeft') {
-    if (typeof activeRow.goLeft === 'function') activeRow.goLeft();
-  }
-});
-
   </script>
 </body>
 </html>

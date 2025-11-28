@@ -2,11 +2,12 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Infinite Carousel Galerie</title>
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>WRKSHP</title>
 
-  <!-- ✅ Switzer über Fontshare einbinden -->
-<link href="https://api.fontshare.com/v2/css?f[]=PlusJakartaSans@400,500,600,700,800&display=swap" rel="stylesheet">
+  <!-- Schriftart: Plus Jakarta Sans über Fontshare -->
+  <link href="https://api.fontshare.com/v2/css?f[]=PlusJakartaSans@400,500,600,700,800&display=swap" rel="stylesheet">
 
   <style>
     html, body {
@@ -15,7 +16,6 @@
       height: 100%;
       background: #fff;
 
-      /* ✅ Schriftart Switzer mit Fallbacks */
       font-family: 'Plus Jakarta Sans', 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
       font-weight: 500;
       line-height: 1.4;
@@ -36,7 +36,10 @@
       align-items: center;
       pointer-events: none;
     }
-    .header h1, .header a { pointer-events: auto; }
+    .header h1,
+    .header a {
+      pointer-events: auto;
+    }
 
     .header h1 {
       font-size: 38px;
@@ -55,7 +58,7 @@
 
     .header h1 a:hover,
     .header-right:hover {
-      text-decoration: underline; 
+      text-decoration: underline;
       text-underline-offset: 10px;
     }
 
@@ -75,6 +78,15 @@
       display: flex;
       align-items: center;
       justify-content: center;
+    }
+
+    /* iOS Safe Area Unterstützung */
+    @supports (padding: env(safe-area-inset-bottom)) {
+      .caption,
+      .counter,
+      .next-project {
+        bottom: calc(14px + env(safe-area-inset-bottom));
+      }
     }
 
     .caption {
@@ -112,14 +124,12 @@
       justify-content: center;
     }
 
-    /* Querformat */
     .slide img.landscape {
       height: 50vh;
       width: auto;
       object-fit: contain;
     }
 
-    /* Hochformat */
     .slide img.portrait {
       max-height: 70vh;
       width: auto;
@@ -132,7 +142,7 @@
       bottom: 14px;
       right: 20px;
       font-size: 38px;
-      font-family: 'Switzer', 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-family: 'Plus Jakarta Sans', 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
       color: #000;
       text-decoration: none;
       cursor: pointer;
@@ -145,26 +155,30 @@
       text-underline-offset: 10px;
     }
 
+    /* === Mobile Anpassungen === */
     @media (max-width: 900px) {
-  .slide img.landscape {
-    max-width: 100vw;
-    width: 100%;
-    height: auto;
-    object-fit: contain;
-  }
+      .slide img.landscape {
+        max-width: 100vw;
+        width: 100%;
+        height: auto;
+      }
 
-  .next-project {
-    display: none;
-  }
+      .caption,
+      .counter,
+      .next-project {
+        font-size: 28px;
+      }
 
-  .counter {
-    left: auto;
-    right: 20px;
-    transform: none; /* ganz wichtig! */
-    font-size: 38px; /* optional kleiner */
-  }
-}
+      .next-project {
+        display: none;
+      }
 
+      .counter {
+        left: auto;
+        right: 20px;
+        transform: none;
+      }
+    }
   </style>
 </head>
 
